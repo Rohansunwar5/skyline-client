@@ -30,13 +30,16 @@ function ProjectCard({
             animate={isInView ? { opacity: 1, y: 0 } : (reduceMotion ? undefined : { opacity: 0, y: 28 })}
             transition={{ duration: 0.55, delay, ease: 'easeOut' }}
         >
-            <img
-                src={proj.imageUrl}
-                alt={proj.title}
-                className="absolute inset-0 w-full h-full object-cover object-center opacity-55 group-hover:scale-[1.02] transition-transform duration-500"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-            />
+            <picture>
+                <source media="(max-width: 767px)" srcSet={proj.mobileImageUrl} />
+                <img
+                    src={proj.imageUrl}
+                    alt={proj.title}
+                    className="absolute inset-0 w-full h-full object-cover object-center opacity-55 group-hover:scale-[1.02] transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                />
+            </picture>
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent z-10" />
 
             <div className="relative z-20 p-4 sm:p-6 self-start">

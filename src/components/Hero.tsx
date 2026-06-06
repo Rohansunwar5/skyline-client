@@ -24,6 +24,9 @@ const SPECIALTIES = [
     'SCADA Telemetry Integration',
 ];
 
+const PROJECT_IMAGES = Array.from({ length: 12 }, (_, i) => `/projects/${i + 1}.webp`);
+const MOBILE_PROJECT_IMAGES = Array.from({ length: 16 }, (_, i) => `/projects-mobile/${i + 1}.webp`);
+
 export default function Hero() {
     const { openQuote } = useQuoteModal();
     const shouldReduceMotion = useReducedMotion();
@@ -33,6 +36,18 @@ export default function Hero() {
     const [engineers, setEngineers] = useState(0);
     const [states, setStates] = useState(0);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [currentImage, setCurrentImage] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia('(max-width: 767px)');
+        const handler = (e: MediaQueryListEvent | MediaQueryList) => setIsMobile(e.matches);
+        handler(mq);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
+
+    const images = isMobile ? MOBILE_PROJECT_IMAGES : PROJECT_IMAGES;
 
     const statsRef = useRef<HTMLDivElement>(null);
     const statsInView = useInView(statsRef, { once: true });
@@ -60,6 +75,13 @@ export default function Hero() {
         return () => document.removeEventListener('keydown', handleEsc);
     }, [isProfileOpen]);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImage(prev => (prev + 1) % images.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
     const stats = [
         { value: years, suffix: '+', label: 'Years of experience', color: 'text-white' },
         { value: projects, suffix: '+', label: 'Projects completed', color: 'text-skyline-orange' },
@@ -70,11 +92,22 @@ export default function Hero() {
     return (
         <section id="hero" className="relative bg-skyline-dark text-white overflow-hidden">
             <div className="absolute inset-0 z-0">
-                <img
-                    src="/assets/home-hero.jpg"
-                    alt="Electrical Infrastructure"
-                    className="w-full h-full object-cover object-center scale-105"
-                />
+                <AnimatePresence>
+                    <motion.div
+                        key={currentImage}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.7 }}
+                        className="absolute inset-0"
+                    >
+                        <img
+                            src={images[currentImage % images.length]}
+                            alt="Project showcase"
+                            className="w-full h-full object-cover object-center scale-105"
+                        />
+                    </motion.div>
+                </AnimatePresence>
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/85 to-slate-950/70 z-10" />
                 <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-950 to-transparent z-10" />
             </div>

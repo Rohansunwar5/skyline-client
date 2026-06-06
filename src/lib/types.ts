@@ -15,6 +15,7 @@ export interface ProjectItem {
     category: string;
     sector: string;
     imageUrl: string;
+    mobileImageUrl: string;
     description: string;
     specs: string[];
     status: 'COMPLETED' | 'ONGOING' | 'UPCOMING';

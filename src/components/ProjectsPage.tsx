@@ -205,12 +205,15 @@ export default function ProjectsPage() {
 
                                             {/* Image */}
                                             <div className={`relative overflow-hidden ${isTall ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}>
-                                                <img
-                                                    src={project.imageUrl}
-                                                    alt={project.title}
-                                                    className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-90 transition-all duration-500"
-                                                    referrerPolicy="no-referrer"
-                                                />
+                                                <picture>
+                                                    <source media="(max-width: 767px)" srcSet={project.mobileImageUrl} />
+                                                    <img
+                                                        src={project.imageUrl}
+                                                        alt={project.title}
+                                                        className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-90 transition-all duration-500"
+                                                        referrerPolicy="no-referrer"
+                                                    />
+                                                </picture>
                                                 {/* Gradient overlay */}
                                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
 
